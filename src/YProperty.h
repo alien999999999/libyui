@@ -36,14 +36,35 @@ enum YPropertyType
     YOtherProperty,		// requires futher checking
     YStringProperty,		// const std::string &
     YBoolProperty,		// bool
-    YIntegerProperty		// YCP Integer == C++ long long
+    YIntegerProperty,		// YCP Integer == C++ long long
+    YColorProperty		// YColor
 };
 
 class YWidget;
 class YProperty;
 
 typedef long long	YInteger;
+typedef uint32_t	YColor;
 
+#define YCOLOR_NONE		0xFFFFFFFF
+#define YCOLOR_TRANSPARENT	0xFF000000
+#define YCOLOR_RED		0x00FF0000
+#define YCOLOR_GREEN		0x0000FF00
+#define YCOLOR_BLUE		0x000000FF
+#define YCOLOR_WHITE		0x00FFFFFF
+#define YCOLOR_BLACK		0x00000000
+
+std::string YColorToString( YColor color )
+{
+    if (color == YCOLOR_NONE)
+        return "";
+    static const char* digits = "0123456789ABCDEF";
+    std::string rc(7, '0');
+    rc[0] = '#';
+    for (size_t i=1, j=20; i<7; ++i,j-=4)
+       rc[i] = digits[(color>>j) & 0xF];
+    return rc;
+}
 
 /**
  * Class for widget properties.
@@ -135,6 +156,12 @@ public:
     explicit YPropertyValue( int num ):
 	_type( YIntegerProperty ), _integerVal( num ) {}
 
+    /**
+     * Constructor for color (YColor) properties.
+     **/
+    explicit YPropertyValue( YColor color ):
+	_type( YColorProperty ), _colorVal( YColor ) {}
+
     explicit YPropertyValue( YPropertyType type ) :
 	_type( type ) {}
 
@@ -180,6 +207,7 @@ public:
     std::string	stringVal() 	const { return _stringVal;	}
     bool 	boolVal()	const { return _boolVal;	}
     YInteger 	integerVal()	const { return _integerVal;	}
+    YColor 	colorVal()	const { return _colorVal;	}
 
 
 private:
@@ -188,6 +216,7 @@ private:
     std::string		_stringVal;
     bool		_boolVal;
     YInteger		_integerVal;
+    YColor		_colorVal;
 };
 
 

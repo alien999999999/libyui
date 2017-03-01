@@ -37,6 +37,7 @@ YProperty::typeAsStr( YPropertyType type )
 	case YStringProperty:		return "String";
 	case YBoolProperty:		return "Bool";
 	case YIntegerProperty:		return "Integer";
+	case YColorProperty:		return "Color";
 
 	    // Intentionally omitting default branch
 	    // so the compiler catches unhandled enum values
@@ -61,6 +62,7 @@ bool YPropertyValue::operator==( const YPropertyValue &other ) const
     case YStringProperty:		return _stringVal == other.stringVal();
     case YBoolProperty:         return _boolVal == other.boolVal();
     case YIntegerProperty:		return _integerVal == other.integerVal();
+    case YColorProperty:		return _colorVal == other.colorVal();
 
     case YUnknownPropertyType:
     case YOtherProperty:
