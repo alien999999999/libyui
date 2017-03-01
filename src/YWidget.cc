@@ -67,6 +67,8 @@ struct YWidgetPrivate
 	, autoShortcut( false )
 	, toolkitWidgetRep( 0 )
 	, id( 0 )
+	, color( YCOLOR_NONE )
+	, backgroundColor( YCOLOR_NONE )
 	, functionKey( 0 )
     {
 	stretch.hor	= false;
@@ -91,6 +93,8 @@ struct YWidgetPrivate
     YWidgetID *			id;
     YBothDim<bool>		stretch;
     YBothDim<int>		weight;
+    YColor			color;
+    YColor			backgroundColor;
     int				functionKey;
     std::string			helpText;
 };
@@ -407,6 +411,8 @@ YWidget::propertySet()
 	 * @property integer		VWeight		vertical   layout weight (same as `VWeight(widget())
 	 * @property boolean		HStretch	horizontally stretchable? (same as `opt(`hstretch))
 	 * @property boolean		VStretch	vertically   stretchable? (same as `opt(`vstretch))
+	 * @property YColor		color		font color for widget text
+	 * @property YColor		backgroundColor	background color for widget
 	 **/
 
 	propSet.add( YProperty( YUIProperty_Enabled,		YBoolProperty	 ) );
@@ -418,6 +424,8 @@ YWidget::propertySet()
 	propSet.add( YProperty( YUIProperty_VWeight,		YIntegerProperty ) );
 	propSet.add( YProperty( YUIProperty_HStretch,		YBoolProperty    ) );
 	propSet.add( YProperty( YUIProperty_VStretch,		YBoolProperty    ) );
+	propSet.add( YProperty( YUIProperty_Color,		YColorProperty    ) );
+	propSet.add( YProperty( YUIProperty_BackgroundColor,	YColorProperty    ) );
     }
 
     return propSet;
@@ -444,6 +452,8 @@ YWidget::setProperty( const std::string & propertyName, const YPropertyValue & v
     else if ( propertyName == YUIProperty_VWeight  )	setWeight( YD_VERT , val.integerVal() );
     else if ( propertyName == YUIProperty_HStretch )	setStretchable( YD_HORIZ, val.boolVal() );
     else if ( propertyName == YUIProperty_VStretch )	setStretchable( YD_VERT , val.boolVal() );
+    else if ( propertyName == YUIProperty_Color    )	setColor( val.colorVal() );
+    else if ( propertyName == YUIProperty_BackgroundColor    )	setBackgroundColor( val.colorVal() );
 
     return true; // success -- no special processing necessary
 }
@@ -472,6 +482,8 @@ YWidget::getProperty( const std::string & propertyName )
     if ( propertyName == YUIProperty_VWeight		) return YPropertyValue( weight( YD_VERT  ) );
     if ( propertyName == YUIProperty_HStretch		) return YPropertyValue( stretchable( YD_HORIZ ) );
     if ( propertyName == YUIProperty_VStretch		) return YPropertyValue( stretchable( YD_VERT  ) );
+    if ( propertyName == YUIProperty_Color		) return YPropertyValue( color() );
+    if ( propertyName == YUIProperty_BackgroundColor	) return YPropertyValue( backgroundColor() );
 
     return YPropertyValue( false ); // NOTREACHED
 }
@@ -569,6 +581,25 @@ bool YWidget::stretchable( YUIDimension dim ) const
     return priv->stretch[ dim ];
 }
 
+void YWidget::setColor( YColor newColor )
+{
+    priv->color = newColor;
+}
+
+YColor YWidget::color() const
+{
+    return priv->color;
+}
+
+void YWidget::setBackgroundColor( YColor newBackgroundColor )
+{
+    priv->backgroundColor = newBackgroundColor;
+}
+
+YColor YWidget::backgroundColor() const
+{
+    return priv->backgroundColor;
+}
 
 int YWidget::weight( YUIDimension dim )
 {

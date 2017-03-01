@@ -453,6 +453,26 @@ public:
     void setDefaultStretchable( YUIDimension dim, bool newStretch );
 
     /**
+     * This is a YColor value to be used for the font.
+     **/
+    virtual YColor color() const;
+
+    /**
+     * Set the font color of the widget.
+     **/
+    void setColor( YColor newColor );
+
+    /**
+     * This is a YColor value to be used for the background.
+     **/
+    virtual YColor backgroundColor() const;
+
+    /**
+     * Set the background color of the widget.
+     **/
+    void setBackgroundColor( YColor newBackgroundColor );
+
+    /**
      * The weight is used in situations where all widgets can get their
      * preferred size and yet space is available. The remaining space will be
      * devided between all stretchable widgets according to their weights. A
